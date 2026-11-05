@@ -92,7 +92,7 @@ This program does not upload images or contact a remote service. All decoding, l
   - Authors / Committers / Reviewers：仓库维护者（GitHub owner）
   - Approvers：仓库维护者（GitHub owner）
 - 所有外部贡献通过 Pull Request 提交，并由维护者审查后合并。
-- 详细政策：[CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md)
+- 详细政策：[CODE_SIGNING_POLICY.md](CODE_SIGNING_POLICY.md)\n- **Application status:** submitted to SignPath Foundation on 2026-11-05; pending review.
 
 ## 贡献 / Contributing
 
@@ -105,4 +105,5 @@ This program does not upload images or contact a remote service. All decoding, l
 [MIT](LICENSE)
 
 第三方组件与系统库说明见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+
 
