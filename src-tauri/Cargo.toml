@@ -1,0 +1,33 @@
+[package]
+name = "pingtu-collage"
+version = "5.0.0"
+description = "拼图工坊 — Tauri collage studio"
+authors = ["PinTu"]
+edition = "2021"
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = [] }
+serde = { version = "1", features = ["derive"] }
+base64 = "0.22"
+mime_guess = "2"
+rfd = "0.15"
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = ["Win32_Foundation", "Win32_UI_Shell"] }
+
+[profile.release]
+codegen-units = 1
+lto = false
+opt-level = "s"
+panic = "unwind"
+strip = false
+
+# Keep build scripts fresh/small; this also sidesteps a Device Guard hash rule
+# that was blocking the default optimised build-script binaries in this sandbox.
+[profile.release.build-override]
+codegen-units = 16
+debug = false
+opt-level = 0

@@ -1,0 +1,57 @@
+# This workflow is intentionally manual. Do not enable it until SignPath
+# Foundation has approved the project and provided the organization/project/
+# signing-policy/artifact-configuration identifiers.
+#
+# Required repository secrets:
+#   SIGNPATH_API_TOKEN
+# Required repository variables:
+#   SIGNPATH_ORGANIZATION_ID
+#   SIGNPATH_PROJECT_SLUG
+#   SIGNPATH_SIGNING_POLICY_SLUG
+#   SIGNPATH_ARTIFACT_CONFIGURATION_SLUG
+name: signpath
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sign:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-pc-windows-msvc
+
+      - name: Build unsigned artifact
+        shell: pwsh
+        run: |
+          cargo build --release --manifest-path src-tauri/Cargo.toml
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          Copy-Item src-tauri/target/release/pingtu-collage.exe "dist/拼图工坊.exe"
+
+      - name: Upload unsigned artifact
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: pingtu-collage-unsigned
+          path: dist/拼图工坊.exe
+          if-no-files-found: error
+
+      # Enable after SignPath onboarding and set the secrets/variables above.
+      # - name: Submit signing request
+      #   uses: signpath/github-action-submit-signing-request@v1
+      #   with:
+      #     api-token: ${{ secrets.SIGNPATH_API_TOKEN }}
+      #     organization-id: ${{ vars.SIGNPATH_ORGANIZATION_ID }}
+      #     project-slug: ${{ vars.SIGNPATH_PROJECT_SLUG }}
+      #     signing-policy-slug: ${{ vars.SIGNPATH_SIGNING_POLICY_SLUG }}
+      #     artifact-configuration-slug: ${{ vars.SIGNPATH_ARTIFACT_CONFIGURATION_SLUG }}
+      #     github-artifact-id: ${{ steps.upload.outputs.artifact-id }}
+      #     wait-for-completion: true
+      #     output-artifact-directory: signed

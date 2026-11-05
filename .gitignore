@@ -1,0 +1,9 @@
+target/
+dist/
+*.log
+__pycache__/
+*.pyc
+.vs/
+.idea/
+.vscode/
+src-tauri/gen/schemas/

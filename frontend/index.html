@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light" />
+    <title>拼图工坊</title>
+    <link rel="icon" type="image/png" href="assets/icon.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4.5 18.5v1.2c0 .7.6 1.3 1.3 1.3h12.4c.7 0 1.3-.6 1.3-1.3v-1.2" /></symbol>
+      <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="3" /><circle cx="8.5" cy="9.5" r="1.5" /><path d="m5.5 17 4.2-4.2a2 2 0 0 1 2.8 0l1.3 1.3a2 2 0 0 0 2.8 0l2-2" /></symbol>
+      <symbol id="i-clipboard" viewBox="0 0 24 24"><path d="M9 4.5h6M9 3h6a1.5 1.5 0 0 1 1.5 1.5v1H7.5v-1A1.5 1.5 0 0 1 9 3Z" /><path d="M7.5 5.5H6A2 2 0 0 0 4 7.5v11A2 2 0 0 0 6 20.5h12a2 2 0 0 0 2-2v-11a2 2 0 0 0-2-2h-1.5" /></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4.5 7h15M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7m-8.2 0 .8 12a1.7 1.7 0 0 0 1.7 1.6h5.4a1.7 1.7 0 0 0 1.7-1.6l.8-12M10 11v5.5M14 11v5.5" /></symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M19 12H5m0 0 6-6m-6 6 6 6" /></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14m0 0-6-6m6 6-6 6" /></symbol>
+      <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8h13m0 0-3-3m3 3-3 3M20 16H7m0 0 3-3m-3 3 3 3" /></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18" /></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4.2 4.2L19 6.5" /></symbol>
+      <symbol id="i-expand" viewBox="0 0 24 24"><path d="M9 4H4v5m11-5h5v5M9 20H4v-5m11 5h5v-5" /></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6.3M20 5v6h-6" /></symbol>
+      <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3.5c.6 4.8 3.7 7.9 8.5 8.5-4.8.6-7.9 3.7-8.5 8.5-.6-4.8-3.7-7.9-8.5-8.5 4.8-.6 7.9-3.7 8.5-8.5Z" /></symbol>
+      <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18h1.2a1.8 1.8 0 0 0 1.2-3.1 1.8 1.8 0 0 1 1.2-3.1h2.2A3.2 3.2 0 0 0 21 11.6 9 9 0 0 0 12 3Z" /><circle cx="7.5" cy="10" r=".8" /><circle cx="9.6" cy="6.8" r=".8" /><circle cx="14" cy="6.7" r=".8" /><circle cx="17" cy="9.3" r=".8" /></symbol>
+      <symbol id="i-frame" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" /><rect x="7.5" y="7.5" width="9" height="9" rx="1" /></symbol>
+      <symbol id="i-folder" viewBox="0 0 24 24"><path d="M3.5 7.5A2.5 2.5 0 0 1 6 5h3l2 2h7a2.5 2.5 0 0 1 2.5 2.5v7A2.5 2.5 0 0 1 18 19H6a2.5 2.5 0 0 1-2.5-2.5v-9Z" /></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m8 10 4 4 4-4" /></symbol>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5 9-5Zm-9 9 9 5 9-5M3 16l9 5 9-5" /></symbol>
+      <symbol id="i-fit" viewBox="0 0 24 24"><path d="M8 3H4v4m12-4h4v4M8 21H4v-4m12 4h4v-4" /><rect x="8" y="8" width="8" height="8" rx="1.5" /></symbol>
+    </svg>
+
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+
+    <div class="boot-screen" id="bootScreen">
+      <div class="boot-card">
+        <img class="boot-logo" src="assets/icon.png" alt="" />
+        <div class="boot-brand">拼图工坊</div>
+        <div class="boot-text">正在准备画布<span class="boot-dots">…</span></div>
+        <div class="boot-track"><span></span></div>
+      </div>
+    </div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark"><img src="assets/icon.png" alt="" /></div>
+          <div class="brand-copy">
+            <div class="brand-name">拼图工坊<span>STUDIO</span></div>
+            <div class="brand-sub">COLLAGE MAKER</div>
+          </div>
+        </div>
+
+        <div class="project-pill">
+          <span class="live-dot"></span>
+          <span>本地创作</span>
+          <span class="pill-divider"></span>
+          <span id="topSummary">4 个画位</span>
+        </div>
+
+        <div class="top-actions">
+          <button class="btn btn-ghost" id="addBtn" type="button">
+            <svg class="icon"><use href="#i-plus"></use></svg>
+            <span>添加图片</span>
+          </button>
+          <button class="btn btn-primary" id="exportBtn" type="button">
+            <svg class="icon"><use href="#i-download"></use></svg>
+            <span>导出作品</span>
+            <span class="btn-shortcut" data-shortcut="export">Ctrl E</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="studio">
+        <aside class="panel library">
+          <div class="panel-head">
+            <div>
+              <div class="eyebrow">LIBRARY</div>
+              <div class="panel-title-row">
+                <h2>图片素材</h2>
+                <span class="badge" id="imageCount">0 / 4</span>
+              </div>
+              <p class="panel-description">拖动缩略图排序 · 双击图片替换</p>
+            </div>
+          </div>
+
+          <div class="count-block">
+            <div class="field-line">
+              <span class="field-label">画位数量</span>
+              <span class="field-meta">1 — 9</span>
+            </div>
+            <div class="count-chips" id="countChips" role="group" aria-label="画位数量"></div>
+          </div>
+
+          <div class="image-grid-wrap">
+            <div class="image-grid" id="imageGrid"></div>
+            <div class="loading-tip" id="loadingTip" hidden>
+              <span class="spinner"></span>
+              <span>正在读取图片…</span>
+            </div>
+          </div>
+
+          <div class="library-actions">
+            <button class="btn btn-soft grow" id="addBtn2" type="button">
+              <svg class="icon"><use href="#i-plus"></use></svg>
+              <span>添加图片</span>
+            </button>
+            <button class="btn btn-icon-soft" id="pasteBtn" type="button" title="粘贴剪贴板图片">
+              <svg class="icon"><use href="#i-clipboard"></use></svg>
+            </button>
+          </div>
+
+          <div class="library-links">
+            <button class="text-link" id="sampleBtn" type="button">
+              <svg class="icon tiny"><use href="#i-sparkle"></use></svg>
+              载入示例
+            </button>
+            <button class="text-link muted" id="clearBtn" type="button">清空</button>
+          </div>
+
+          <div class="selection-tools" id="selectionTools">
+            <div class="selection-copy">
+              <span class="eyebrow">SELECTED</span>
+              <span id="selectionLabel">已选中第 1 张</span>
+            </div>
+            <div class="selection-buttons">
+              <button class="mini-button" id="moveLeftBtn" title="前移" type="button">
+                <svg class="icon"><use href="#i-arrow-left"></use></svg>
+              </button>
+              <button class="mini-button" id="moveRightBtn" title="后移" type="button">
+                <svg class="icon"><use href="#i-arrow-right"></use></svg>
+              </button>
+              <button class="mini-button" id="replaceBtn" title="替换图片" type="button">
+                <svg class="icon"><use href="#i-swap"></use></svg>
+              </button>
+              <button class="mini-button danger" id="removeBtn" title="移除" type="button">
+                <svg class="icon"><use href="#i-trash"></use></svg>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <section class="stage-column">
+          <div class="stage-head">
+            <div class="stage-title">
+              <span class="eyebrow">CANVAS</span>
+              <div class="stage-title-line">
+                <h2>画布预览</h2>
+                <span class="stage-status" id="stageStatus">实时渲染</span>
+              </div>
+            </div>
+            <div class="stage-head-actions">
+              <span class="dimension-pill" id="stageDims">2048 × 2048 px</span>
+              <button class="icon-button" id="centerImageBtn" title="画面居中" type="button" disabled>
+                <svg class="icon"><use href="#i-fit"></use></svg>
+              </button>
+              <button class="icon-button" id="fullscreenBtn" title="全屏预览" type="button">
+                <svg class="icon"><use href="#i-expand"></use></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="stage" id="stage">
+            <div class="stage-glow"></div>
+            <div class="stage-dots"></div>
+            <div class="preview-shell" id="previewShell">
+              <canvas id="previewCanvas" aria-label="拼图预览"></canvas>
+            </div>
+            <div class="stage-caption" id="stageCaption">
+              <span class="caption-line"></span>
+              <span>添加图片，让画面开始生长</span>
+            </div>
+            <div class="drop-overlay" id="dropOverlay">
+              <div class="drop-card">
+                <div class="drop-icon"><svg class="icon"><use href="#i-image"></use></svg></div>
+                <strong>松开即可添加图片</strong>
+                <span>支持 JPG、PNG、WebP、BMP、GIF</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-foot">
+            <div class="stage-foot-left">
+              <span class="status-dot small"></span>
+              <span id="stageFootText">所有处理均在本机完成</span>
+            </div>
+            <div class="stage-foot-right">
+              <span id="stageAspect">1:1 方形</span>
+              <span class="foot-separator"></span>
+              <span id="stageSize">2048 px</span>
+            </div>
+          </div>
+        </section>
+
+        <aside class="panel inspector">
+          <div class="inspector-head">
+            <div>
+              <div class="eyebrow">STYLE</div>
+              <div class="panel-title-row">
+                <h2>样式设置</h2>
+                <button class="text-link small" id="resetBtn" type="button">
+                  <svg class="icon tiny"><use href="#i-refresh"></use></svg>
+                  重置
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="tabs" id="tabs" role="tablist">
+            <button class="tab-button active" data-tab="layout" role="tab" type="button">排版</button>
+            <button class="tab-button" data-tab="canvas" role="tab" type="button">画布</button>
+            <button class="tab-button" data-tab="border" role="tab" type="button">边框</button>
+            <span class="tab-indicator" id="tabIndicator"></span>
+          </div>
+
+          <div class="tab-viewport">
+            <section class="tab-panel active" data-panel="layout">
+              <div class="section-heading">
+                <span>排列方式</span>
+                <span class="section-meta">5 种模式</span>
+              </div>
+              <div class="layout-list" id="layoutList"></div>
+
+              <div class="soft-divider"></div>
+
+              <div class="section-heading">
+                <span>图片适应</span>
+              </div>
+              <div class="segmented" id="fitSegment">
+                <button class="segment active" data-fit="cover" type="button">填充裁剪</button>
+                <button class="segment" data-fit="contain" type="button">完整显示</button>
+              </div>
+              <div class="tip-card">
+                <svg class="icon"><use href="#i-layers"></use></svg>
+                <span>拖动左侧缩略图可以自由调整图片顺序。</span>
+              </div>
+            </section>
+
+            <section class="tab-panel" data-panel="canvas">
+              <div class="section-heading">
+                <span>画面比例</span>
+                <span class="section-meta" id="ratioMeta">1 : 1</span>
+              </div>
+              <div class="ratio-grid" id="ratioGrid"></div>
+
+              <div class="soft-divider"></div>
+
+              <div class="section-heading">
+                <span>输出尺寸</span>
+                <span class="section-meta">长边像素</span>
+              </div>
+              <div class="size-grid" id="sizeGrid"></div>
+
+              <div class="dimension-card">
+                <div>
+                  <span class="eyebrow">OUTPUT</span>
+                  <strong id="outputDims">2048 × 2048</strong>
+                  <span class="dimension-unit">px</span>
+                </div>
+                <div class="dimension-note">适合社交平台与高清打印</div>
+              </div>
+
+              <div class="tip-card calm">
+                <svg class="icon"><use href="#i-fit"></use></svg>
+                <span>调整比例或尺寸后，预览会保持同样的画面构图。</span>
+              </div>
+            </section>
+
+            <section class="tab-panel" data-panel="border">
+              <div class="switch-row">
+                <div>
+                  <div class="switch-title">外边框</div>
+                  <div class="switch-sub">在作品周围保留呼吸空间</div>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="borderToggle" checked />
+                  <span class="switch-track"><span class="switch-thumb"></span></span>
+                </label>
+              </div>
+
+              <div class="slider-group" id="borderSliders">
+                <div class="slider-row">
+                  <div class="slider-label"><span>边框粗细</span><output id="borderWidthValue">26 px</output></div>
+                  <input class="range" id="borderWidth" type="range" min="0" max="80" step="1" value="26" />
+                </div>
+                <div class="slider-row">
+                  <div class="slider-label"><span>图片间距</span><output id="gapValue">14 px</output></div>
+                  <input class="range" id="gap" type="range" min="0" max="60" step="1" value="14" />
+                </div>
+                <div class="slider-row">
+                  <div class="slider-label"><span>图片圆角</span><output id="radiusValue">16 px</output></div>
+                  <input class="range" id="radius" type="range" min="0" max="60" step="1" value="16" />
+                </div>
+              </div>
+
+              <div class="soft-divider"></div>
+
+              <div class="section-heading">
+                <span>边框颜色</span>
+                <span class="color-code" id="colorCode">#FFFFFF</span>
+              </div>
+              <div class="swatch-row" id="swatchRow"></div>
+              <div class="tip-card calm">
+                <svg class="icon"><use href="#i-palette"></use></svg>
+                <span>颜色同时用于外边框与图片之间的留白。</span>
+              </div>
+            </section>
+          </div>
+
+          <div class="inspector-footer">
+            <div class="export-note">
+              <span class="eyebrow">EXPORT READY</span>
+              <span id="exportNote">6 张图片 · 2048 × 2048</span>
+            </div>
+            <button class="btn btn-primary full" id="exportBtn2" type="button">
+              <svg class="icon"><use href="#i-download"></use></svg>
+              导出作品
+            </button>
+          </div>
+        </aside>
+      </main>
+
+      <footer class="statusbar">
+        <div class="status-left">
+          <span class="status-dot"></span>
+          <span>本地处理 · 图片不会上传</span>
+        </div>
+        <div class="status-center" id="statusCenter">0 张图片 · 4 个画位 · 2048 × 2048 px</div>
+        <div class="status-right">
+          <span><kbd data-shortcut="open">Ctrl O</kbd> 添加</span>
+          <span><kbd data-shortcut="export">Ctrl E</kbd> 导出</span>
+        </div>
+      </footer>
+    </div>
+
+    <input id="fileInput" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/gif" multiple hidden />
+    <input id="replaceInput" type="file" accept="image/png,image/jpeg,image/webp,image/bmp,image/gif" hidden />
+
+    <div class="toast" id="toast" role="status" aria-live="polite">
+      <span class="toast-dot"></span>
+      <span id="toastText">已更新</span>
+    </div>
+
+    <div class="modal-layer" id="confirmModal" aria-hidden="true">
+      <div class="modal-card confirm-card">
+        <div class="modal-icon warning"><svg class="icon"><use href="#i-layers"></use></svg></div>
+        <h3 id="confirmTitle">调整画位数量？</h3>
+        <p id="confirmText">减少画位会移除超出范围的图片。</p>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" data-close-modal="confirmModal" type="button">取消</button>
+          <button class="btn btn-primary" id="confirmBtn" type="button">继续调整</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-layer" id="exportModal" aria-hidden="true">
+      <div class="modal-card export-card">
+        <div class="modal-head">
+          <div>
+            <div class="eyebrow">EXPORT</div>
+            <h3>导出作品</h3>
+          </div>
+          <button class="icon-button" data-close-modal="exportModal" type="button">
+            <svg class="icon"><use href="#i-close"></use></svg>
+          </button>
+        </div>
+        <div class="export-summary">
+          <span class="eyebrow">FINAL SIZE</span>
+          <strong id="exportDims">2048 × 2048 px</strong>
+          <span id="exportCount">6 张图片</span>
+        </div>
+        <div class="format-label">文件格式</div>
+        <div class="format-grid" id="formatGrid">
+          <button class="format-card active" data-format="png" type="button">
+            <span class="format-badge">PNG</span>
+            <strong>无损画质</strong>
+            <span>文件较大，适合收藏</span>
+          </button>
+          <button class="format-card" data-format="jpg" type="button">
+            <span class="format-badge">JPG</span>
+            <strong>轻巧分享</strong>
+            <span>照片与社交平台</span>
+          </button>
+          <button class="format-card" data-format="webp" type="button">
+            <span class="format-badge">WEBP</span>
+            <strong>均衡推荐</strong>
+            <span>体积小，兼容现代设备</span>
+          </button>
+        </div>
+        <div class="quality-row" id="qualityRow">
+          <div class="slider-label"><span>导出质量</span><output id="qualityValue">92%</output></div>
+          <input class="range" id="qualityRange" type="range" min="70" max="100" step="1" value="92" />
+        </div>
+        <div class="export-path">
+          <div class="export-path-head">
+            <span>导出目录</span>
+            <button class="path-browse" id="browseExportPath" type="button">选择目录</button>
+          </div>
+          <input
+            class="export-path-input"
+            id="exportPathInput"
+            type="text"
+            spellcheck="false"
+            autocomplete="off"
+            placeholder="默认：程序目录\Exports"
+          />
+          <p class="export-hint">
+            默认使用程序目录下的 Exports；也可以选择其他目录。受保护目录导出时会请求一次管理员权限，导出完成后自动打开目录。
+          </p>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-ghost" data-close-modal="exportModal" type="button">取消</button>
+          <button class="btn btn-primary" id="confirmExportBtn" type="button">
+            <svg class="icon"><use href="#i-download"></use></svg>
+            导出到该目录
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="export-progress" id="exportProgress" hidden>
+      <div class="progress-card">
+        <span class="spinner large"></span>
+        <strong>正在渲染高清作品</strong>
+        <span id="progressText">请稍候，不会上传任何图片</span>
+      </div>
+    </div>
+
+    <div class="modal-layer fullscreen-layer" id="fullscreenModal" aria-hidden="true">
+      <div class="fullscreen-top">
+        <div>
+          <span class="eyebrow">PREVIEW</span>
+          <strong>作品预览</strong>
+        </div>
+        <button class="icon-button light" data-close-modal="fullscreenModal" type="button">
+          <svg class="icon"><use href="#i-close"></use></svg>
+        </button>
+      </div>
+      <div class="fullscreen-body">
+        <canvas id="fullscreenCanvas"></canvas>
+      </div>
+      <div class="fullscreen-foot" id="fullscreenDims">2048 × 2048 px</div>
+    </div>
+
+    <script src="js/tauri-bridge.js"></script>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>
